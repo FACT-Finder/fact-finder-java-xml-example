@@ -6,7 +6,7 @@
 	<packaging>war</packaging>
 	<version>6.10.5.0</version>
 	<name>FF4Java Maven Webapp</name>
-	<description>FACT-Finder integration example which is using xjc - Java™ Architecture for XML Binding Binding Compiler based classes for the search, recommender, tagcloud, campaigns and similarRecords and the JSON-API for suggest</description>
+	<description>FACT-Finder integration example which is using xjc - Java™ Architecture for XML Binding Compiler based classes for the search, recommender, tagcloud, campaigns and similarRecords and the JSON-API for suggest</description>
 	<dependencies>
 		<dependency>
 			<groupId>commons-codec</groupId>

@@ -1,2 +1,2 @@
 # FACT-Finder xml (json) example (Java)
-FACT-Finder integration example which is using xjc - Java™ Architecture for XML Binding Binding Compiler based classes for the search, recommender, tagcloud, campaigns and similarRecords and the JSON-API for suggest
+FACT-Finder integration example which is using xjc - Java™ Architecture for XML Binding Compiler based classes for the search, recommender, tagcloud, campaigns and similarRecords and the JSON-API for suggest
