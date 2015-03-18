@@ -8,9 +8,6 @@
 <%@page import="java.io.InputStream"%>
 <%@page import="java.io.InputStreamReader"%>
 <%@page import="java.io.BufferedReader"%>
-<%@page import="java.net.URLEncoder"%>
-<%@page import="java.util.Enumeration"%>
-<%@page import="java.util.Map.Entry"%>
 <%
 boolean isTracking = request.getParameter("event") != null;
 

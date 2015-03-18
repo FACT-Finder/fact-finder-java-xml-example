@@ -1,18 +1,15 @@
 var tracking = {
 
-	doTrack : function(eventName, channel, sessionId, id, masterId, extraParams) {
+	doTrack : function(eventName, channel, sessionId, extraParams) {
 		var params = {
 			event : eventName,
 			channel : channel,
-			sid : sessionId,
-			id : id,
-			masterId : masterId
+			sid : sessionId
 		};
 		for ( var param in extraParams) {
 			if (extraParams[param] != null)
 				params[param] = extraParams[param];
 		}
-		// send information as utf-8 encoded post
 		$.ajax({
 			type : "GET",
 			url : "proxy.jsp",
@@ -25,7 +22,9 @@ var tracking = {
 
 	click : function(channel, sessionId, id, masterId, query, pos, origPos,
 			page, origPageSize) {
-		this.doTrack('click', channel, sessionId, id, masterId, {
+		this.doTrack('click', channel, sessionId, {
+			id : id,
+			masterId : masterId,
 			query : query,
 			pos : pos,
 			origPos : origPos,
@@ -35,17 +34,33 @@ var tracking = {
 	},
 
 	cart : function(channel, sessionId, id, masterId, count, price) {
-		this.doTrack('cart', channel, sessionId, id, masterId, {
+		this.doTrack('cart', channel, sessionId, {
+			id : id,
+			masterId : masterId,
 			count : count,
 			price : price
 		});
 	},
 
+	directCart : function(channel, sessionId, id, masterId, query, pos,
+			origPos, page, origPageSize, count, price) {
+		this.click(channel, sessionId, id, masterId, query, pos, origPos, page,
+				origPageSize);
+		this.cart(channel, sessionId, id, masterId, count, price);
+	},
+
 	checkout : function(channel, sessionId, id, masterId, count, price) {
-		this.doTrack('checkout', channel, sessionId, id, masterId, {
+		this.doTrack('checkout', channel, sessionId, {
+			id : id,
+			masterId : masterId,
 			count : count,
 			price : price
 		});
-	}
+	},
 
-}; // end of tracking instance
+	login : function(channel, sessionId, userId) {
+		this.doTrack('login', channel, sessionId, {
+			userId : userId
+		});
+	}
+}

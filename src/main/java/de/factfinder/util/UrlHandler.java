@@ -15,7 +15,7 @@ import de.factfinder.properties.PropertiesNames;
 import de.factfinder.xml610.handler.FACTFinderServices;
 
 /**
- * 
+ *
  * Builds the request urls based on predefined response parameters or search terms. Creates also the detail link urls for this demo.
  *
  * @author gt
@@ -32,7 +32,6 @@ public final class UrlHandler implements Constants {
 		DEFAULT_PARMS = new HashMap<String, String>();
 		DEFAULT_PARMS.put(Parameters.omitContextName.name(), "true");
 		DEFAULT_PARMS.put(Parameters.format.name(), "xml");
-		DEFAULT_PARMS.put(Parameters.site.name(), "webshop");
 	}
 
 	private UrlHandler() {
@@ -141,8 +140,8 @@ public final class UrlHandler implements Constants {
 		return getQueryString(sourceUrl, false);
 	}
 
-	public static String getDetailPageUrl(final String id, final String mid, final String productNumber, final String price, String query, int pos,
-			int origPos, int page, final int origPageSize) {
+	public static String getDetailPageUrl(final String id, final String mid, final String productNumber, final String price, final String query, final int pos,
+			final int origPos, final int page, final int origPageSize) {
 		final StringBuilder detailPageUrl = new StringBuilder("ffdetails.jsp");
 		detailPageUrl.append(QUERY_STRING_PREFIX);
 		if (id != null && !id.isEmpty()) {

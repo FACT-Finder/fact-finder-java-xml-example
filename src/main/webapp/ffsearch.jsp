@@ -50,6 +50,9 @@
 	Ff result = SearchHandler.getInstance().getResult(searchInputStream);
 	TagCloud tagCloud = null;
 	
+	String escapedQuery = request.getParameter(Parameters.query.name());
+	escapedQuery = escapedQuery != null ? StringEscapeUtils.escapeEcmaScript(escapedQuery) : "*";
+	
 	List<Group> sliderGroups = new ArrayList<Group>();
 	if (result != null){
 		if (result.getCampaigns() != null){
@@ -376,9 +379,24 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 							productUrl = UrlHandler.getDetailPageUrl(number, masterNumber, productNumber, price);
 						}
 						%>
+						    
 						<div>
 							<p> 
-								<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=number %>) <%=price %>&euro;</a><br />						
+								<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=number %>) <%=price %>&euro;</a><br />
+								<br/>
+								<a onclick="javascript: tracking.directCart(
+								'<%=UrlHandler.getInstance().getChannel()%>',
+								'<%=sessionId%>',
+								'<%=number%>',
+								'<% if (!masterNumber.isEmpty()){out.print(masterNumber);} %>',						
+								'<%=escapedQuery%>', 
+								'<%=pos%>',
+								'<%=origPos%>',
+								'<%=currentPage%>',
+								'<%=origPageSize%>',
+								'1',
+								'<%=price%>'
+								       );false;">Track Direct-To-Cart</a>    						
 								<a href="<%=productUrl%>"><img onload="resizePicture(this, 200, 100);" title="<%=name%>" src="<%=imageUrl%>" /></a> 
 							</p>
 						</div>
