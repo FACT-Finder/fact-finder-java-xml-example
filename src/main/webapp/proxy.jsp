@@ -3,7 +3,7 @@
 <%@page import="de.factfinder.util.UrlHandler"%>
 <%@page import="de.factfinder.util.Constants"%>
 <%@page import="de.factfinder.util.Parameters"%> 
-<%@page import="de.factfinder.xml610.handler.FACTFinderServices"%>
+<%@page import="de.factfinder.xml611.handler.FACTFinderServices"%>
 <%@page import="java.net.URL"%>
 <%@page import="java.io.InputStream"%>
 <%@page import="java.io.InputStreamReader"%>

@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified">
+	<xs:element name="results">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="record" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="count" type="xs:int" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="recommendationTimedOut">
+		<xs:simpleType>
+			<xs:restriction base="xs:boolean">
+				<xs:whiteSpace value="collapse" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="field">
+		<xs:complexType mixed="true">
+			<xs:attribute name="name" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="0" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="record">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="field" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="nr" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="id" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="0" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ff">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="recommendationTimedOut" minOccurs="0" />
+				<xs:element ref="results" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="importProgress">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="currentChannel" type="xs:string">
+				</xs:element>
+				<xs:element name="progress" type="xs:string">
+				</xs:element>
+				<xs:element name="percentage" type="xs:string">
+				</xs:element>
+				<xs:element name="totalPercentage" type="xs:string">
+				</xs:element>
+				<xs:element name="finished" type="xs:string">
+				</xs:element>
+				<xs:element name="running" type="xs:string">
+				</xs:element>
+				<xs:element name="status">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="message" type="xs:string" minOccurs="0"  maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType> 
+
+				</xs:element>
+				<xs:element name="errors">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="message" type="xs:string" minOccurs="0"  maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

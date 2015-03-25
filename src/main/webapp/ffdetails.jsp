@@ -1,21 +1,21 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="de.factfinder.properties.PropertiesNames"%>
 <%@page import="de.factfinder.properties.PropertiesHandler"%>
-<%@page import="de.factfinder.xml610.search.Product"%>
-<%@page import="de.factfinder.xml610.search.Question"%>
-<%@page import="de.factfinder.xml610.search.Campaign"%>
-<%@page import="de.factfinder.xml610.search.Campaigns"%>
-<%@page import="de.factfinder.xml610.search.Answer"%>
-<%@page import="de.factfinder.xml610.search.Text"%>
-<%@page import="de.factfinder.xml610.similarrecords.SimilarRecords"%>
-<%@page import="de.factfinder.xml610.recommender.Record"%>
-<%@page import="de.factfinder.xml610.recommender.Field"%>
-<%@page import="de.factfinder.xml610.recommender.Results"%>
-<%@page import="de.factfinder.xml610.recommender.Ff"%>
-<%@page import="de.factfinder.xml610.handler.ProductCampaignsHandler"%>
-<%@page import="de.factfinder.xml610.handler.SimilarRecordsHandler"%>
-<%@page import="de.factfinder.xml610.handler.RecommenderHandler"%>
-<%@page import="de.factfinder.xml610.handler.FACTFinderServices"%>
+<%@page import="de.factfinder.xml611.search.Product"%>
+<%@page import="de.factfinder.xml611.search.Question"%>
+<%@page import="de.factfinder.xml611.search.Campaign"%>
+<%@page import="de.factfinder.xml611.search.Campaigns"%>
+<%@page import="de.factfinder.xml611.search.Answer"%>
+<%@page import="de.factfinder.xml611.search.Text"%>
+<%@page import="de.factfinder.xml611.similarrecords.SimilarRecords"%>
+<%@page import="de.factfinder.xml611.recommender.Record"%>
+<%@page import="de.factfinder.xml611.recommender.Field"%>
+<%@page import="de.factfinder.xml611.recommender.Results"%>
+<%@page import="de.factfinder.xml611.recommender.Ff"%>
+<%@page import="de.factfinder.xml611.handler.ProductCampaignsHandler"%>
+<%@page import="de.factfinder.xml611.handler.SimilarRecordsHandler"%>
+<%@page import="de.factfinder.xml611.handler.RecommenderHandler"%>
+<%@page import="de.factfinder.xml611.handler.FACTFinderServices"%>
 <%@page import="de.factfinder.util.ConnectionHandler"%>
 <%@page import="de.factfinder.util.UrlHandler"%>
 <%@page import="de.factfinder.util.Parameters"%>
@@ -51,7 +51,7 @@
 	
 	
 	Ff recommendations = null;
-	de.factfinder.xml610.similarrecords.Ff similarRecords = null;
+	de.factfinder.xml611.similarrecords.Ff similarRecords = null;
 	Campaigns campaigns = null;
 	if (propertiesHandler.getBooleanProperty(PropertiesNames.useRecommendations.name())){
 		URL recommendationsRequestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.Recommender.name(), request);
@@ -191,14 +191,14 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 	if (similarRecords != null && similarRecords.getSimilarRecords().getRecord().size() > 0){ %>
 	<div style="float:left; width: 25%">
 		<h3>similar records</h3>
-		<% for (de.factfinder.xml610.similarrecords.Record record : similarRecords.getSimilarRecords().getRecord()){
+		<% for (de.factfinder.xml611.similarrecords.Record record : similarRecords.getSimilarRecords().getRecord()){
 			String number = "";
 			String masterNumber = "";
 			String productNumber = "";
 			String name = "";
 			String imageUrl = "";
 			String price = "";
-			for (final de.factfinder.xml610.similarrecords.Field field : record.getField()){
+			for (final de.factfinder.xml611.similarrecords.Field field : record.getField()){
 				if (field.getName().equals(idField)){
 					number = field.getContent();
 				}
@@ -249,7 +249,7 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 								String name = "";
 								String imageUrl = "";
 								String price = "";
-								for (final de.factfinder.xml610.search.Field field : record.getField()){
+								for (final de.factfinder.xml611.search.Field field : record.getField()){
 									if (field.getName().equals(idField)){
 										number = field.getContent();
 									}

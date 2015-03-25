@@ -1,27 +1,27 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="de.factfinder.properties.PropertiesNames"%>
 <%@page import="de.factfinder.properties.PropertiesHandler"%>
-<%@page import="de.factfinder.xml610.tagcloud.TagCloud"%>
-<%@page import="de.factfinder.xml610.tagcloud.Entry"%>
-<%@page import="de.factfinder.xml610.search.Product"%>
-<%@page import="de.factfinder.xml610.search.PushedProducts"%>
-<%@page import="de.factfinder.xml610.search.Text"%>
-<%@page import="de.factfinder.xml610.search.Feedback"%>
-<%@page import="de.factfinder.xml610.search.Answer"%>
-<%@page import="de.factfinder.xml610.search.Question"%>
-<%@page import="de.factfinder.xml610.search.Campaign"%>
-<%@page import="de.factfinder.xml610.search.Field"%>
-<%@page import="de.factfinder.xml610.search.Record"%>
-<%@page import="de.factfinder.xml610.search.Ff.ProductsPerPageOptions.Option"%>
-<%@page import="de.factfinder.xml610.search.Ff.ProductsPerPageOptions"%>
-<%@page import="de.factfinder.xml610.search.Element"%>
-<%@page import="de.factfinder.xml610.search.Group"%>
-<%@page import="de.factfinder.xml610.search.BreadCrumbTrailItem"%>
-<%@page import="de.factfinder.xml610.search.Sort"%>
-<%@page import="de.factfinder.xml610.search.Ff"%>
-<%@page import="de.factfinder.xml610.handler.SearchHandler"%>
-<%@page import="de.factfinder.xml610.handler.TagCloudHandler"%>
-<%@page import="de.factfinder.xml610.handler.FACTFinderServices"%>
+<%@page import="de.factfinder.xml611.tagcloud.TagCloud"%>
+<%@page import="de.factfinder.xml611.tagcloud.Entry"%>
+<%@page import="de.factfinder.xml611.search.Product"%>
+<%@page import="de.factfinder.xml611.search.PushedProducts"%>
+<%@page import="de.factfinder.xml611.search.Text"%>
+<%@page import="de.factfinder.xml611.search.Feedback"%>
+<%@page import="de.factfinder.xml611.search.Answer"%>
+<%@page import="de.factfinder.xml611.search.Question"%>
+<%@page import="de.factfinder.xml611.search.Campaign"%>
+<%@page import="de.factfinder.xml611.search.Field"%>
+<%@page import="de.factfinder.xml611.search.Record"%>
+<%@page import="de.factfinder.xml611.search.Ff.ProductsPerPageOptions.Option"%>
+<%@page import="de.factfinder.xml611.search.Ff.ProductsPerPageOptions"%>
+<%@page import="de.factfinder.xml611.search.Element"%>
+<%@page import="de.factfinder.xml611.search.Group"%>
+<%@page import="de.factfinder.xml611.search.BreadCrumbTrailItem"%>
+<%@page import="de.factfinder.xml611.search.Sort"%>
+<%@page import="de.factfinder.xml611.search.Ff"%>
+<%@page import="de.factfinder.xml611.handler.SearchHandler"%>
+<%@page import="de.factfinder.xml611.handler.TagCloudHandler"%>
+<%@page import="de.factfinder.xml611.handler.FACTFinderServices"%>
 <%@page import="de.factfinder.util.Parameters"%>
 <%@page import="de.factfinder.util.UrlHandler"%>
 <%@page import="de.factfinder.util.ConnectionHandler"%>
@@ -44,7 +44,6 @@
 	String priceField = propertiesHandler.getProperty(PropertiesNames.priceField.name());
 
 	String sessionId = request.getSession().getId();
-	String referer = request.getHeader("referer") != null ? request.getHeader("referer") : "";
 	URL requestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.Search.name(), request);
 	InputStream searchInputStream = ConnectionHandler.getInstance().getInputStream(requestUrl, request);
 	Ff result = SearchHandler.getInstance().getResult(searchInputStream);
