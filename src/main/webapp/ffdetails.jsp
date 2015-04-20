@@ -135,7 +135,8 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 		'<%=id %>',
 		'<% if (masterIdField != null){out.print(mid);} %>',
 		'1',
-		'<%=p%>'
+		'<%=p%>',
+		'<% if (query != null){out.print(query);} %>' 
          );false;">Track Cart</a>         
     <br/>
 	<a onclick="javascript: tracking.checkout(
@@ -144,7 +145,8 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 		'<%=id %>',
 		'<% if (masterIdField != null){out.print(mid);} %>',
 		'1',
-		'<%=p%>'
+		'<%=p%>',
+		'<% if (query != null){out.print(query);} %>'
          );false;">Track Checkout</a> 
 	<br/>
 	<%if (recommendations != null && recommendations.getResults().getRecord().size() > 0){ %>

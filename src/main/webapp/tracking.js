@@ -33,12 +33,13 @@ var tracking = {
 		});
 	},
 
-	cart : function(channel, sessionId, id, masterId, count, price) {
+	cart : function(channel, sessionId, id, masterId, count, price, query) {
 		this.doTrack('cart', channel, sessionId, {
 			id : id,
 			masterId : masterId,
 			count : count,
-			price : price
+			price : price,
+			query : query
 		});
 	},
 
@@ -46,15 +47,16 @@ var tracking = {
 			origPos, page, origPageSize, count, price) {
 		this.click(channel, sessionId, id, masterId, query, pos, origPos, page,
 				origPageSize);
-		this.cart(channel, sessionId, id, masterId, count, price);
+		this.cart(channel, sessionId, id, masterId, count, price, query);
 	},
 
-	checkout : function(channel, sessionId, id, masterId, count, price) {
+	checkout : function(channel, sessionId, id, masterId, count, price, query) {
 		this.doTrack('checkout', channel, sessionId, {
 			id : id,
 			masterId : masterId,
 			count : count,
-			price : price
+			price : price,
+			query : query
 		});
 	},
 
