@@ -444,7 +444,7 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 							} else if (campaign.getFlavour().equals("FEEDBACK")){
 								if (campaign.getFeedback() != null){
 									for (Text feedbackText : campaign.getFeedback().getText()){
-										if (feedbackText.isHtml()){
+										if (!feedbackText.isHtml()){
 											out.print(StringEscapeUtils.escapeHtml4(feedbackText.getValue())+ "<br/>");	
 										}else{
 											out.print(feedbackText.getValue() + "<br/>");
