@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="de.factfinder.properties.PropertiesNames"%>
 <%@page import="de.factfinder.properties.PropertiesHandler"%>
@@ -27,15 +28,16 @@
 <%
 
 	final PropertiesHandler propertiesHandler = PropertiesHandler.getHandler();
-	String idField = propertiesHandler.getProperty(PropertiesNames.idField.name());
+	String trackingIdField = propertiesHandler.getProperty(PropertiesNames.trackingIdField.name());
+	String recordIdField = propertiesHandler.getProperty(PropertiesNames.recordIdField.name());
 	String masterIdField = propertiesHandler.getProperty(PropertiesNames.masterIdField.name());
 	String productNumberField = propertiesHandler.getProperty(PropertiesNames.productNumberField.name());
 	String nameField = propertiesHandler.getProperty(PropertiesNames.nameField.name());
 	String imageField = propertiesHandler.getProperty(PropertiesNames.imageField.name());
 	String priceField = propertiesHandler.getProperty(PropertiesNames.priceField.name());
 	
-	String id = request.getParameter(Parameters.id.name());
-	String mid = request.getParameter(Parameters.mid.name());
+	String tid = request.getParameter(Parameters.trackingId.name());
+	String mid = request.getParameter(Parameters.masterId.name());
 	String p = request.getParameter(Parameters.price.name());
 	String productNo = request.getParameter(Parameters.productNumber.name());
 	String query = request.getParameter(Parameters.query.name());
@@ -54,17 +56,17 @@
 	de.factfinder.xml611.similarrecords.Ff similarRecords = null;
 	Campaigns campaigns = null;
 	if (propertiesHandler.getBooleanProperty(PropertiesNames.useRecommendations.name())){
-		URL recommendationsRequestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.Recommender.name(), request);
+		URL recommendationsRequestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.Recommender.name(), request, true);
 		InputStream inputStream = ConnectionHandler.getInstance().getInputStream(recommendationsRequestUrl, request);
 		recommendations = RecommenderHandler.getInstance().getRecommendations(inputStream);
 	}
 	if (propertiesHandler.getBooleanProperty(PropertiesNames.useSimilarRecords.name())){
-		URL similarRecordsRequestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.SimilarRecords.name(), request);
+		URL similarRecordsRequestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.SimilarRecords.name(), request, true);
 		InputStream inputStream = ConnectionHandler.getInstance().getInputStream(similarRecordsRequestUrl, request);
 		similarRecords = SimilarRecordsHandler.getInstance().getSimilarRecords(inputStream);
 	}	
 	if (propertiesHandler.getBooleanProperty(PropertiesNames.useProductCampaigns.name())){
-		URL productCampaignsRequestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.ProductCampaign.name(), request);
+		URL productCampaignsRequestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.ProductCampaign.name(), request, true);
 		InputStream inputStream = ConnectionHandler.getInstance().getInputStream(productCampaignsRequestUrl, request);
 		campaigns = ProductCampaignsHandler.getInstance().getCampaigns(inputStream);
 		if (campaigns != null){
@@ -111,7 +113,7 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 				tracking.click(
 						'<%=UrlHandler.getInstance().getChannel()%>',
 						'<%=sessionId%>',
-						'<%=id %>',
+						'<%=tid %>',
 						'<% if (masterIdField != null){out.print(mid);} %>',
 						'<% if (query != null){out.print(query);} %>', 
 						'<% if (pos != null){out.print(pos);} %>',
@@ -124,15 +126,13 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 </script>
 <div style="float:left">
 	article details<br>
-	ID: <%=id %><br/>
-	Master-ID: <% if (masterIdField != null){out.print(mid);} %><br/>
 	Product-Number: <%=productNo %><br/>
 	Price: <%=p %>&euro;<br/>	
     <br/>
 	<a onclick="javascript: tracking.cart(
 		'<%=UrlHandler.getInstance().getChannel()%>',
 		'<%=sessionId%>',
-		'<%=id %>',
+		'<%=tid %>',
 		'<% if (masterIdField != null){out.print(mid);} %>',
 		'1',
 		'<%=p%>',
@@ -142,7 +142,7 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 	<a onclick="javascript: tracking.checkout(
 		'<%=UrlHandler.getInstance().getChannel()%>',
 		'<%=sessionId%>',
-		'<%=id %>',
+		'<%=tid %>',
 		'<% if (masterIdField != null){out.print(mid);} %>',
 		'1',
 		'<%=p%>',
@@ -154,18 +154,22 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 			<h3>recommendations</h3>
 			<%
 				for (Record record : recommendations.getResults().getRecord()){
-					String number = "";
-					String masterNumber = "";
+					String trackingId = "";
+					String recordId = "";
+					String masterId = "";
 					String productNumber = "";
 					String name = "";
 					String imageUrl = "";
 					String price = "";
 					for (final Field field : record.getField()){
-						if (field.getName().equals(idField)){
-							number = field.getContent();
+						if (field.getName().equals(trackingIdField)){
+							trackingId = field.getContent();
+						}
+						if (field.getName().equals(recordIdField)){
+							recordId = field.getContent();
 						}
 						if (field.getName().equals(masterIdField)){
-							masterNumber = field.getContent();
+							masterId = field.getContent();
 						}
 						if (field.getName().equals(productNumberField)){
 							productNumber = field.getContent();
@@ -181,10 +185,10 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 						}
 					}
 
-					String productUrl = UrlHandler.getDetailPageUrl(number, masterNumber, productNumber, price);
+					String productUrl = UrlHandler.getDetailPageUrl(recordId, masterId, trackingId, productNumber, price);
 			%>
 				<div style="clear: both; float: left">
-					<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=number %>) <%=price %>&euro;</a><br />
+					<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=productNumber %>) <%=price %>&euro;</a><br />
 					<a href="<%=productUrl%>"><img onload="resizePicture(this, 200, 100);" title="<%=name%>" src="<%=imageUrl%>" /></a>
 				</div>
 			<% } %>
@@ -194,18 +198,22 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 	<div style="float:left; width: 25%">
 		<h3>similar records</h3>
 		<% for (de.factfinder.xml611.similarrecords.Record record : similarRecords.getSimilarRecords().getRecord()){
-			String number = "";
-			String masterNumber = "";
+			String trackingId = "";
+			String recordId = "";
+			String masterId = "";
 			String productNumber = "";
 			String name = "";
 			String imageUrl = "";
 			String price = "";
 			for (final de.factfinder.xml611.similarrecords.Field field : record.getField()){
-				if (field.getName().equals(idField)){
-					number = field.getContent();
+				if (field.getName().equals(trackingIdField)){
+					trackingId = field.getContent();
+				}
+				if (field.getName().equals(recordIdField)){
+					recordId = field.getContent();
 				}
 				if (field.getName().equals(masterIdField)){
-					masterNumber = field.getContent();
+					masterId = field.getContent();
 				}
 				if (field.getName().equals(productNumberField)){
 					productNumber = field.getContent();
@@ -220,12 +228,11 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 					price= field.getContent();
 				}
 			}
-
-			String productUrl = UrlHandler.getDetailPageUrl(number, masterNumber, productNumber, price);
+			String productUrl = UrlHandler.getDetailPageUrl(recordId, masterId, trackingId, productNumber, price);
 			%>
 			<div style="clear: both; float: left">
 				<p> 
-					<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=number %>) <%=price %>&euro;</a><br />
+					<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=productNumber %>) <%=price %>&euro;</a><br />
 					<a href="<%=productUrl%>"><img onload="resizePicture(this, 200, 100);" title="<%=name%>" src="<%=imageUrl%>" /></a>
 				</p>
 			</div>
@@ -240,23 +247,31 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 					if (campaign.getFlavour().equals("FEEDBACK")){
 						if (campaign.getFeedback() != null){
 							for (Text feedbackText : campaign.getFeedback().getText()){
-								out.print(feedbackText.getValue() + "<br/>");	
+								if (feedbackText.isHtml()){
+									out.print(StringEscapeUtils.escapeHtml4(feedbackText.getValue())+ "<br/>");	
+								}else{
+									out.print(feedbackText.getValue() + "<br/>");
+								}
 							}
 						}
 						if (campaign.getPushedProducts() != null){ %>
 						<% for (Product record : campaign.getPushedProducts().getProduct()){
-								String number = "";
-								String masterNumber = "";
+								String trackingId = "";
+								String recordId = "";
+								String masterId = "";
 								String productNumber = "";
 								String name = "";
 								String imageUrl = "";
 								String price = "";
 								for (final de.factfinder.xml611.search.Field field : record.getField()){
-									if (field.getName().equals(idField)){
-										number = field.getContent();
+									if (field.getName().equals(trackingIdField)){
+										trackingId = field.getContent();
+									}
+									if (field.getName().equals(recordIdField)){
+										recordId = field.getContent();
 									}
 									if (field.getName().equals(masterIdField)){
-										masterNumber = field.getContent();
+										masterId = field.getContent();
 									}
 									if (field.getName().equals(productNumberField)){
 										productNumber = field.getContent();
@@ -271,10 +286,10 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 										price= field.getContent();
 									}
 								}
-								String productUrl = UrlHandler.getDetailPageUrl(number, masterNumber, productNumber, price);
+								String productUrl = UrlHandler.getDetailPageUrl(recordId, masterId, trackingId, productNumber, price);
 								%>
 								<div style="clear: both; float: left">
-									<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=number %>) <%=price %>&euro;</a><br />
+									<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=productNumber %>) <%=price %>&euro;</a><br />
 									<a href="<%=productUrl%>"><img onload="resizePicture(this, 200, 100);" title="<%=name%>" src="<%=imageUrl%>" /></a>
 								</div>
 							<% }

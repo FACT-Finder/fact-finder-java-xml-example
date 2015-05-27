@@ -36,7 +36,8 @@
 <!DOCTYPE html>
 <%
 	final PropertiesHandler propertiesHandler = PropertiesHandler.getHandler();
-	String idField = propertiesHandler.getProperty(PropertiesNames.idField.name());
+	String trackingIdField = propertiesHandler.getProperty(PropertiesNames.trackingIdField.name());
+	String recordIdField = propertiesHandler.getProperty(PropertiesNames.recordIdField.name());
 	String masterIdField = propertiesHandler.getProperty(PropertiesNames.masterIdField.name());
 	String productNumberField = propertiesHandler.getProperty(PropertiesNames.productNumberField.name());
 	String nameField = propertiesHandler.getProperty(PropertiesNames.nameField.name());
@@ -334,22 +335,25 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 					int currentPage = result.getPaging().getCurrentPage();
 					int origPageSize = result.getProductsPerPageOptions().getDefault().intValue();
 						for (Record record : result.getResults().getRecord()){
-						
 						int pos = result.getProductsPerPageOptions().getSelected().intValue() * (currentPage-1) + record.getNr() + 1;
 						String origPosField = "";
-						String number = "";
-						String masterNumber = "";
+						String trackingId = "";
+						String recordId = "";
+						String masterId = "";
 						String productNumber = "";
 						String name = "";
 						String description = "";
 						String imageUrl = "";
 						String price = "";
 						for (final Field field : record.getField()){
-							if (field.getName().equals(idField)){
-								number = field.getContent();
+							if (field.getName().equals(trackingIdField)){
+								trackingId= field.getContent();
+							}
+							if (field.getName().equals(recordIdField)){
+								recordId = field.getContent();
 							}
 							if (field.getName().equals(masterIdField)){
-								masterNumber = field.getContent();
+								masterId = field.getContent();
 							}
 							if (field.getName().equals(productNumberField)){
 								productNumber = field.getContent();
@@ -373,21 +377,21 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 						}
 						String productUrl = null;
 						if (origPos > -1){
-							productUrl = UrlHandler.getDetailPageUrl(number, masterNumber, productNumber, price, query, pos, origPos, currentPage, origPageSize);
+							productUrl = UrlHandler.getDetailPageUrl(recordId, masterId, trackingId, productNumber, price, query, pos, origPos, currentPage, origPageSize);
 						}else{
-							productUrl = UrlHandler.getDetailPageUrl(number, masterNumber, productNumber, price);
+							productUrl = UrlHandler.getDetailPageUrl(recordId, masterId, trackingId, productNumber, price);
 						}
 						%>
 						    
 						<div>
 							<p> 
-								<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=number %>) <%=price %>&euro;</a><br />
+								<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=productNumber %>) <%=price %>&euro;</a><br />
 								<br/>
 								<a onclick="javascript: tracking.directCart(
 								'<%=UrlHandler.getInstance().getChannel()%>',
 								'<%=sessionId%>',
-								'<%=number%>',
-								'<% if (!masterNumber.isEmpty()){out.print(masterNumber);} %>',						
+								'<%=trackingId%>',
+								'<% if (!masterId.isEmpty()){out.print(masterId);} %>',						
 								'<%=escapedQuery%>', 
 								'<%=pos%>',
 								'<%=origPos%>',
@@ -440,24 +444,32 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 							} else if (campaign.getFlavour().equals("FEEDBACK")){
 								if (campaign.getFeedback() != null){
 									for (Text feedbackText : campaign.getFeedback().getText()){
-										out.print(feedbackText.getValue() + "<br/>");
+										if (feedbackText.isHtml()){
+											out.print(StringEscapeUtils.escapeHtml4(feedbackText.getValue())+ "<br/>");	
+										}else{
+											out.print(feedbackText.getValue() + "<br/>");
+										}
 									}
 								}
 								if (campaign.getPushedProducts() != null){ %>
 								<div style="width: 50%">
 									<% for (Product record : campaign.getPushedProducts().getProduct()){
-										String number = "";
-										String masterNumber = "";
+										String trackingId = "";
+										String recordId = "";
+										String masterId = "";
 										String productNumber = "";
 										String name = "";
 										String imageUrl = "";
 										String price = "";
 										for (final Field field : record.getField()){
-											if (field.getName().equals(idField)){
-												number = field.getContent();
+											if (field.getName().equals(trackingIdField)){
+												trackingId= field.getContent();
+											}
+											if (field.getName().equals(recordIdField)){
+												recordId = field.getContent();
 											}
 											if (field.getName().equals(masterIdField)){
-												masterNumber = field.getContent();
+												masterId = field.getContent();
 											}
 											if (field.getName().equals(productNumberField)){
 												productNumber = field.getContent();
@@ -472,11 +484,11 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 												price= field.getContent();
 											}
 										}
-										String productUrl = UrlHandler.getDetailPageUrl(number, masterNumber, productNumber, price);
+										String productUrl = UrlHandler.getDetailPageUrl(recordId, masterId, trackingId, productNumber, price);
 										%>
 										<div>
 											<p> 
-												<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=number %>) <%=price %>&euro;</a><br />
+												<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=productNumber %>) <%=price %>&euro;</a><br />
 												<a href="<%=productUrl%>"><img onload="resizePicture(this, 200, 100);" title="<%=name%>" src="<%=imageUrl%>" /></a>
 											</p>
 										</div>

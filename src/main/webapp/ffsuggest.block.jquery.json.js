@@ -107,7 +107,7 @@ function FFSuggest() {
 				url = document[pFormname].action + cutParamsUrl(url);
 				// It should be noted that the Detail url info is added in
 				// onSubmit above
-				url = addTrackingInformationToSearchUrl(url);
+				url = addTrackingInformationToUrl(url);
 			}
 
 			window.location = url;
@@ -116,15 +116,11 @@ function FFSuggest() {
 		return true;
 	}
 
-	function addTrackingInformationToDetailUrl(url) {
+	function addTrackingInformationToUrl(url) {
 		url = addParam(url, 'queryFromSuggest', 'true');
 		url = addParam(url, 'userInput', pLastQuery);
-		return url;
-	}
-
-	function addTrackingInformationToSearchUrl(url) {
-		url = addParam(url, 'queryFromSuggest', 'true');
-		url = addParam(url, 'userInput', pLastQuery);
+		url = addParam(url, 'ignoreForCache', 'userInput');
+		url = addParam(url, 'ignoreForCache', 'queryFromSuggest');
 		return url;
 	}
 
@@ -580,12 +576,13 @@ function FFSuggest() {
 				dplnk = 'ffdetails.jsp?' + dplnk;
 			}
 			if (idParam != null) {
-				dplnk += '&id=' + idParam;
+				dplnk += '&recordId=' + idParam;
+				dplnk += '&trackingId=' + idParam;
 			}
 			if (midParam != null) {
-				dplnk += '&mid=' + midParam;
+				dplnk += '&masterId=' + midParam;
 			}
-			dplnk = addTrackingInformationToDetailUrl(dplnk);
+			dplnk = addTrackingInformationToUrl(dplnk);
 			return dplnk;
 		}
 	}
