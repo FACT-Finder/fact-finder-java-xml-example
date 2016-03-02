@@ -1,27 +1,27 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="de.factfinder.properties.PropertiesNames"%>
 <%@page import="de.factfinder.properties.PropertiesHandler"%>
-<%@page import="de.factfinder.xml611.tagcloud.TagCloud"%>
-<%@page import="de.factfinder.xml611.tagcloud.Entry"%>
-<%@page import="de.factfinder.xml611.search.Product"%>
-<%@page import="de.factfinder.xml611.search.PushedProducts"%>
-<%@page import="de.factfinder.xml611.search.Text"%>
-<%@page import="de.factfinder.xml611.search.Feedback"%>
-<%@page import="de.factfinder.xml611.search.Answer"%>
-<%@page import="de.factfinder.xml611.search.Question"%>
-<%@page import="de.factfinder.xml611.search.Campaign"%>
-<%@page import="de.factfinder.xml611.search.Field"%>
-<%@page import="de.factfinder.xml611.search.Record"%>
-<%@page import="de.factfinder.xml611.search.Ff.ProductsPerPageOptions.Option"%>
-<%@page import="de.factfinder.xml611.search.Ff.ProductsPerPageOptions"%>
-<%@page import="de.factfinder.xml611.search.Element"%>
-<%@page import="de.factfinder.xml611.search.Group"%>
-<%@page import="de.factfinder.xml611.search.BreadCrumbTrailItem"%>
-<%@page import="de.factfinder.xml611.search.Sort"%>
-<%@page import="de.factfinder.xml611.search.Ff"%>
-<%@page import="de.factfinder.xml611.handler.SearchHandler"%>
-<%@page import="de.factfinder.xml611.handler.TagCloudHandler"%>
-<%@page import="de.factfinder.xml611.handler.FACTFinderServices"%>
+<%@page import="de.factfinder.xml71.tagcloud.TagCloud"%>
+<%@page import="de.factfinder.xml71.tagcloud.Entry"%>
+<%@page import="de.factfinder.xml71.search.Product"%>
+<%@page import="de.factfinder.xml71.search.PushedProducts"%>
+<%@page import="de.factfinder.xml71.search.Text"%>
+<%@page import="de.factfinder.xml71.search.Feedback"%>
+<%@page import="de.factfinder.xml71.search.Answer"%>
+<%@page import="de.factfinder.xml71.search.Question"%>
+<%@page import="de.factfinder.xml71.search.Campaign"%>
+<%@page import="de.factfinder.xml71.search.Field"%>
+<%@page import="de.factfinder.xml71.search.Record"%>
+<%@page import="de.factfinder.xml71.search.Ff.ProductsPerPageOptions.Option"%>
+<%@page import="de.factfinder.xml71.search.Ff.ProductsPerPageOptions"%>
+<%@page import="de.factfinder.xml71.search.Element"%>
+<%@page import="de.factfinder.xml71.search.Group"%>
+<%@page import="de.factfinder.xml71.search.BreadCrumbTrailItem"%>
+<%@page import="de.factfinder.xml71.search.Sort"%>
+<%@page import="de.factfinder.xml71.search.Ff"%>
+<%@page import="de.factfinder.xml71.handler.SearchHandler"%>
+<%@page import="de.factfinder.xml71.handler.TagCloudHandler"%>
+<%@page import="de.factfinder.xml71.handler.FACTFinderServices"%>
 <%@page import="de.factfinder.util.Parameters"%>
 <%@page import="de.factfinder.util.UrlHandler"%>
 <%@page import="de.factfinder.util.ConnectionHandler"%>
@@ -83,7 +83,7 @@
 <meta charset="utf-8" />
 <title>web shop</title>
 <link rel="stylesheet" type="text/css" href="suggest.css">
-<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://static.express.fact-finder.com/onetouchslider-1.0/de.factfinder.asn.slider.OneTouchSlider.nocache.js"></script>
 <script type="text/javascript" src="ffsuggest.block.jquery.json.js"></script>
 <script type="text/javascript" src="tracking.js"></script>

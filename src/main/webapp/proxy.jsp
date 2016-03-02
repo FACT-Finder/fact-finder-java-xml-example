@@ -3,7 +3,7 @@
 <%@page import="de.factfinder.util.UrlHandler"%>
 <%@page import="de.factfinder.util.Constants"%>
 <%@page import="de.factfinder.util.Parameters"%> 
-<%@page import="de.factfinder.xml611.handler.FACTFinderServices"%>
+<%@page import="de.factfinder.xml71.handler.FACTFinderServices"%>
 <%@page import="java.net.URL"%>
 <%@page import="java.io.InputStream"%>
 <%@page import="java.io.InputStreamReader"%>
@@ -20,11 +20,9 @@ try {
 	
 		String line = br.readLine();
 		while (line != null) {
-			if (line != null){
-				line = line.trim();
-				if (line.length() > 0){
-					pageContext.getOut().write(line);
-				}
+			line = line.trim();
+			if (line.length() > 0){
+				pageContext.getOut().write(line);
 			}
 			line = br.readLine();
 		}

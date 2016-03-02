@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import de.factfinder.properties.PropertiesHandler;
 import de.factfinder.properties.PropertiesNames;
-import de.factfinder.xml611.handler.FACTFinderServices;
+import de.factfinder.xml71.handler.FACTFinderServices;
 
 /**
  *

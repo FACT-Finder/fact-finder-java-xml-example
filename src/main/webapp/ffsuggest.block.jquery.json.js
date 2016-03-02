@@ -1,5 +1,5 @@
 function FFSuggest() {
-	var pSuggestParCatClass = 'suggestParentCategory';
+
 	var pDebug = false;
 	var pInstanceName = '';
 	var pSearchURL = '';
@@ -12,6 +12,7 @@ function FFSuggest() {
 	var submitted = false;
 	var pShowImages = false;
 	var pCurrentSelection = -1;
+	var useIsoEncoding = 'false';
 
 	var pSuggestImageClass = 'suggestImage';
 	var pSuggestQueryClass = 'suggestTextQuery';
@@ -24,11 +25,13 @@ function FFSuggest() {
 	var pSuggestHighlightClass = 'suggestHighlight';
 	var pSuggestLayerBlockText = 'suggestLayerBlockText';
 	var pSuggestLayerBlockImage = 'suggestLayerBlockImage';
+	var pSuggestParCatClass = 'suggestParentCategory';
 
 	var ptranslation;
 
 	this.init = function(searchURL, formname, queryParamName, divLayername,
-			instanceName, debugMode, channelParamName, channel, showImages) {
+			instanceName, debugMode, channelParamName, channel, showImages,
+			sid, site) {
 		pSearchURL = searchURL;
 		pFormname = formname;
 		pQueryParamName = queryParamName;
@@ -38,6 +41,8 @@ function FFSuggest() {
 		pInstanceName = instanceName;
 		pDebug = debugMode;
 		pShowImages = showImages;
+		pSid = sid;
+		pSite = site;
 
 		if (pSearchURL == '') {
 			if (pDebug)
@@ -86,11 +91,15 @@ function FFSuggest() {
 
 		ptranslation['productName'] = 'Produktname';
 
+		ptranslation['unspecified'] = 'Sonstiges';
+
 		ptranslation['productName.headline'] = 'Produktvorschläge';
 
 		ptranslation['brand'] = 'Hersteller';
 
-		ptranslation['category.headline'] = 'Kategorievorschl#ge';
+		ptranslation['content'] = 'Inhalt';
+
+		ptranslation['category.headline'] = 'Kategorievorschläge';
 
 		ptranslation['searchTerm'] = 'Suchbegriff';
 
@@ -107,21 +116,15 @@ function FFSuggest() {
 				url = document[pFormname].action + cutParamsUrl(url);
 				// It should be noted that the Detail url info is added in
 				// onSubmit above
-				url = addTrackingInformationToUrl(url);
+				url = addTrackingInformationToSearchUrl(url);
 			}
+
+			url = addGeneralTrackingInformationToUrl(url);
 
 			window.location = url;
 			return false;
 		}
 		return true;
-	}
-
-	function addTrackingInformationToUrl(url) {
-		url = addParam(url, 'queryFromSuggest', 'true');
-		url = addParam(url, 'userInput', pLastQuery);
-		url = addParam(url, 'ignoreForCache', 'userInput');
-		url = addParam(url, 'ignoreForCache', 'queryFromSuggest');
-		return url;
 	}
 
 	this.handleClick = function() {
@@ -353,8 +356,27 @@ function FFSuggest() {
 		return url;
 	}
 
+	function addTrackingInformationToDetailUrl(url) {
+		url = addParam(url, 'userInput', pLastQuery);
+		url = addParam(url, 'queryFromSuggest', 'true');
+		return url;
+	}
+
+	function addTrackingInformationToSearchUrl(url) {
+		url = addParam(url, 'userInput', pLastQuery);
+		url = addParam(url, 'queryFromSuggest', 'true');
+		return url;
+	}
+
+	function addGeneralTrackingInformationToUrl(url) {
+		if (pSid) {
+			url = addParam(url, 'sid', pSid);
+		}
+		return url;
+	}
+
 	function getSuggestions() {
-		var query = $('input[name=' + pQueryParamName + ']').attr('value');
+		var query = $('input[name=' + pQueryParamName + ']').val();
 		// check if the same query was asked before
 		if (pLastQuery == query) {
 			return;
@@ -362,18 +384,21 @@ function FFSuggest() {
 			pLastQuery = query;
 		}
 
-		var requestURL = pSearchURL + '?' + pQueryParamName + '='
-				+ encodeURIComponent(query) + '&' + pChannelParamName + '='
-				+ pChannel + '&format=jsonp&callback=?&omitContextName=true';
+		var requestURL = pSearchURL + '?' + pChannelParamName + '=' + pChannel
+				+ '&format=jsonp&callback=?&omitContextName=true&'
+				+ pQueryParamName + '=';
+		if (useIsoEncoding) {
+			requestURL = requestURL + escape(query);
+		} else {
+			requestURL = requestURL + encodeURIComponent(query);
+		}
+		requestURL = addGeneralTrackingInformationToUrl(requestURL);
 
 		$.getJSON(
 				requestURL,
 				function(jsonObj, textStatus) {
 					pCurrentSelection = -1;
-					var suggestions = jsonObj;
-					if (suggestions.suggestions) {
-						suggestions = suggestions.suggestions;
-					}
+					var suggestions = jsonObj.suggestions;
 					if (suggestions != null && suggestions.length > 0) {
 						// create output text
 						// var outputText = '<ul class="' + pLayerName + 'Block"
@@ -490,6 +515,8 @@ function FFSuggest() {
 			suggestCount = suggestCount.replace(/\{0\}/, temp);
 		}
 
+		var encodedQuery = htmlEncode(query);
+
 		var html = '<li id="'
 				+ id
 				+ '" class="'
@@ -508,7 +535,7 @@ function FFSuggest() {
 				+ pSuggestQueryClass
 				+ '">'
 				+ htmlEncode(suggestQuery).replace(
-						new RegExp("(" + query + ")", "ig"),
+						new RegExp("(" + encodedQuery + ")", "ig"),
 						'<span class="' + pSuggestQueryTypedClass
 								+ '">$1</span>') + '</span>'
 				+ getParentCategoryHtml(jsonSug) + '<span class="'
@@ -532,6 +559,8 @@ function FFSuggest() {
 			suggestImage.parentId = id;
 		}
 
+		var encodedQuery = htmlEncode(query);
+
 		var html = '<li id="' + id + '" class="' + pSuggestRowClass + ' '
 				+ pSuggestRowClass + 'WithImage" onMouseMove="' + pInstanceName
 				+ '.handleMouseMove(\'' + id + '\');"' + 'onMouseOut="'
@@ -545,7 +574,7 @@ function FFSuggest() {
 				+ pSuggestQueryClass
 				+ '">'
 				+ htmlEncode(suggestQuery).replace(
-						new RegExp("(" + query + ")", "ig"),
+						new RegExp("(" + encodedQuery + ")", "ig"),
 						'<span class="' + pSuggestQueryTypedClass
 								+ '">$1</span>') + '</span>';
 
@@ -556,7 +585,7 @@ function FFSuggest() {
 		var parCat = jsonSug.attributes['parentCategory'];
 		var parCatHtml = '';
 		if (parCat != null) {
-			parCat = parCat.replace('/', ' > ');
+			parCat = parCat.replace(/\//g, ' > ');
 			parCatHtml = '<span class="' + pSuggestParCatClass + '">'
 					+ decodeURIComponent(parCat) + '<\/span>';
 		}
@@ -565,24 +594,23 @@ function FFSuggest() {
 
 	function onSubmitSuggest(chosenJson) {
 		var type = pSuggest[pCurrentSelection].type;
+		// default code
+		// var dplnk = pSuggest[pCurrentSelection].attributes['deeplink'];
+		// dplnk = addTrackingInformationToDetailUrl(dplnk);
+		// return dplnk;
+
+		// demo code
 		if (type == 'productName') {
-			var dplnk = pSuggest[pCurrentSelection].attributes['deeplink'];
 			var idParam = pSuggest[pCurrentSelection].attributes['id'];
 			var midParam = pSuggest[pCurrentSelection].attributes['masterId'];
-			// only relevant for this demo
-			var pPos = dplnk.indexOf('?');
-			if (pPos >= 0) {
-				dplnk = dplnk.substring(pPos + 1);
-				dplnk = 'ffdetails.jsp?' + dplnk;
-			}
+			var dplnk = 'ffdetails.jsp?';
 			if (idParam != null) {
-				dplnk += '&recordId=' + idParam;
+				dplnk += 'recordId=' + idParam;
 				dplnk += '&trackingId=' + idParam;
 			}
 			if (midParam != null) {
 				dplnk += '&masterId=' + midParam;
 			}
-			dplnk = addTrackingInformationToUrl(dplnk);
 			return dplnk;
 		}
 	}

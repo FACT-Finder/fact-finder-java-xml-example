@@ -2,21 +2,21 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="de.factfinder.properties.PropertiesNames"%>
 <%@page import="de.factfinder.properties.PropertiesHandler"%>
-<%@page import="de.factfinder.xml611.search.Product"%>
-<%@page import="de.factfinder.xml611.search.Question"%>
-<%@page import="de.factfinder.xml611.search.Campaign"%>
-<%@page import="de.factfinder.xml611.search.Campaigns"%>
-<%@page import="de.factfinder.xml611.search.Answer"%>
-<%@page import="de.factfinder.xml611.search.Text"%>
-<%@page import="de.factfinder.xml611.similarrecords.SimilarRecords"%>
-<%@page import="de.factfinder.xml611.recommender.Record"%>
-<%@page import="de.factfinder.xml611.recommender.Field"%>
-<%@page import="de.factfinder.xml611.recommender.Results"%>
-<%@page import="de.factfinder.xml611.recommender.Ff"%>
-<%@page import="de.factfinder.xml611.handler.ProductCampaignsHandler"%>
-<%@page import="de.factfinder.xml611.handler.SimilarRecordsHandler"%>
-<%@page import="de.factfinder.xml611.handler.RecommenderHandler"%>
-<%@page import="de.factfinder.xml611.handler.FACTFinderServices"%>
+<%@page import="de.factfinder.xml71.search.Product"%>
+<%@page import="de.factfinder.xml71.search.Question"%>
+<%@page import="de.factfinder.xml71.search.Campaign"%>
+<%@page import="de.factfinder.xml71.search.Campaigns"%>
+<%@page import="de.factfinder.xml71.search.Answer"%>
+<%@page import="de.factfinder.xml71.search.Text"%>
+<%@page import="de.factfinder.xml71.similarrecords.SimilarRecords"%>
+<%@page import="de.factfinder.xml71.recommender.Record"%>
+<%@page import="de.factfinder.xml71.recommender.Field"%>
+<%@page import="de.factfinder.xml71.recommender.Results"%>
+<%@page import="de.factfinder.xml71.recommender.Ff"%>
+<%@page import="de.factfinder.xml71.handler.ProductCampaignsHandler"%>
+<%@page import="de.factfinder.xml71.handler.SimilarRecordsHandler"%>
+<%@page import="de.factfinder.xml71.handler.RecommenderHandler"%>
+<%@page import="de.factfinder.xml71.handler.FACTFinderServices"%>
 <%@page import="de.factfinder.util.ConnectionHandler"%>
 <%@page import="de.factfinder.util.UrlHandler"%>
 <%@page import="de.factfinder.util.Parameters"%>
@@ -53,7 +53,7 @@
 	
 	
 	Ff recommendations = null;
-	de.factfinder.xml611.similarrecords.Ff similarRecords = null;
+	de.factfinder.xml71.similarrecords.Ff similarRecords = null;
 	Campaigns campaigns = null;
 	if (propertiesHandler.getBooleanProperty(PropertiesNames.useRecommendations.name())){
 		URL recommendationsRequestUrl = UrlHandler.getInstance().getRequestUrl(FACTFinderServices.Recommender.name(), request, true);
@@ -83,7 +83,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8" />
 <title>web shop</title>
-<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript" src="tracking.js"></script>
 <style type="text/css">
 a:link { text-decoration:none; font-weight:bold; color:#000000; }
@@ -197,7 +197,7 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 	if (similarRecords != null && similarRecords.getSimilarRecords().getRecord().size() > 0){ %>
 	<div style="float:left; width: 25%">
 		<h3>similar records</h3>
-		<% for (de.factfinder.xml611.similarrecords.Record record : similarRecords.getSimilarRecords().getRecord()){
+		<% for (de.factfinder.xml71.similarrecords.Record record : similarRecords.getSimilarRecords().getRecord()){
 			String trackingId = "";
 			String recordId = "";
 			String masterId = "";
@@ -205,7 +205,7 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 			String name = "";
 			String imageUrl = "";
 			String price = "";
-			for (final de.factfinder.xml611.similarrecords.Field field : record.getField()){
+			for (final de.factfinder.xml71.similarrecords.Field field : record.getField()){
 				if (field.getName().equals(trackingIdField)){
 					trackingId = field.getContent();
 				}
@@ -263,7 +263,7 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 								String name = "";
 								String imageUrl = "";
 								String price = "";
-								for (final de.factfinder.xml611.search.Field field : record.getField()){
+								for (final de.factfinder.xml71.search.Field field : record.getField()){
 									if (field.getName().equals(trackingIdField)){
 										trackingId = field.getContent();
 									}
