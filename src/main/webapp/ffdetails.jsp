@@ -1,4 +1,3 @@
-<%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@page import="de.factfinder.properties.PropertiesNames"%>
 <%@page import="de.factfinder.properties.PropertiesHandler"%>
@@ -21,6 +20,7 @@
 <%@page import="de.factfinder.util.UrlHandler"%>
 <%@page import="de.factfinder.util.Parameters"%>
 <%@page import="de.factfinder.util.Constants"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="org.apache.commons.lang3.StringEscapeUtils"%>
 <%@page import="java.io.InputStream"%>
 <%@page import="java.net.URL"%>
@@ -188,8 +188,21 @@ a:focus { text-decoration:none; font-weight:bold;color:#000000; background-color
 					String productUrl = UrlHandler.getDetailPageUrl(recordId, masterId, trackingId, productNumber, price);
 			%>
 				<div style="clear: both; float: left">
-					<a href="<%=productUrl%>"><%=name %> (Art-No.: <%=productNumber %>) <%=price %>&euro;</a><br />
-					<a href="<%=productUrl%>"><img onload="resizePicture(this, 200, 100);" title="<%=name%>" src="<%=imageUrl%>" /></a>
+					<a onclick="javascript: tracking.recommendationClick(
+								'<%=UrlHandler.getInstance().getChannel()%>',
+								'<%=sessionId%>',
+								'<%=trackingId%>',
+								'<% if (masterIdField != null){out.print(masterId);} %>',
+								'<% if (masterIdField != null){out.print(mid);}else{out.print(tid);} %>');" 
+					   href="<%=productUrl%>"><%=name %> (Art-No.: <%=productNumber %>) <%=price %>&euro;</a>
+					<br />
+					<a onclick="javascript: tracking.recommendationClick(
+								'<%=UrlHandler.getInstance().getChannel()%>',
+								'<%=sessionId%>',
+								'<%=trackingId%>',
+								'<% if (masterIdField != null){out.print(masterId);} %>',
+								'<% if (masterIdField != null){out.print(mid);}else{out.print(tid);} %>');"
+					   href="<%=productUrl%>"><img onload="resizePicture(this, 200, 100);" title="<%=name%>" src="<%=imageUrl%>" /></a>
 				</div>
 			<% } %>
 		</div>	

@@ -18,13 +18,13 @@ import de.factfinder.properties.PropertiesNames;
  * @author gt
  */
 public final class ConnectionHandler implements Constants {
-	private final String	language;
-	private final Integer	connectionTimeout;
-	private final Integer	connectionReadTimeout;
+	private final Boolean usePersonalisation;
+	private final Integer connectionTimeout;
+	private final Integer connectionReadTimeout;
 
 	private ConnectionHandler() {
 		final PropertiesHandler propertiesHandler = PropertiesHandler.getHandler();
-		this.language = propertiesHandler.getProperty(PropertiesNames.language.name());
+		this.usePersonalisation = propertiesHandler.getBooleanProperty(PropertiesNames.usePersonalisation.name());
 		this.connectionTimeout = propertiesHandler.getIntProperty(PropertiesNames.connectionTimeout.name());
 		this.connectionReadTimeout = propertiesHandler.getIntProperty(PropertiesNames.connectionReadTimeout.name());
 	}
@@ -36,7 +36,9 @@ public final class ConnectionHandler implements Constants {
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setReadTimeout(connectionReadTimeout);
 			connection.setRequestProperty(REQUEST_HEADER_CONTENT_ENCODING, COMPRESSION_TYPE);
-			connection.setRequestProperty(REQUEST_HEADER_LANGUAGE, language);
+			if (usePersonalisation) {
+				connection.setRequestProperty(REQUEST_HEADER_SESSION_ID, request.getSession(true).getId());
+			}
 			connection.connect();
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				System.out.println(url.toString());
@@ -59,7 +61,7 @@ public final class ConnectionHandler implements Constants {
 	}
 
 	private static final class Provider {
-		public static final ConnectionHandler	INSTANCE	= new ConnectionHandler();
+		public static final ConnectionHandler INSTANCE = new ConnectionHandler();
 	}
 
 }
