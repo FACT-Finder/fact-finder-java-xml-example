@@ -16,7 +16,7 @@ var tracking = {
 			data : params,
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			cache : false,
-			async : true
+			async : false
 		});
 	},
 
